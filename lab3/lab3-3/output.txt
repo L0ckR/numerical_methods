@@ -1,0 +1,7 @@
+Least squares method, degree = 1:
+P(x) = 0.011506666666667146 + 1.2879299999999998 * x
+Sum of squared errors = 11.454860640333331
+
+Least squares method, degree = 2:
+P(x) = -0.3321753571428567 + -0.25863910714285837 * x + 0.515523035714286 * x^2
+Sum of squared errors = 1.533004627189285

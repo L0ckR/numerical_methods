@@ -1,0 +1,20 @@
+Matrix A:
+  7.00   3.00 -13.00
+  3.00  -7.00  -8.00
+-13.00  -8.00  -1.00
+
+Eigen values:
+ 18.66  -5.28 -14.38
+
+Eigen vectors:
+eigen vector num 1:   0.75   0.28  -0.61
+eigen vector num 2:  -0.57   0.73  -0.37
+eigen vector num 3:   0.34   0.62   0.70
+
+Number of iterations: 8
+
+Matrix A result::
+ 18.66   0.00   0.00
+  0.00  -5.28   0.00
+  0.00   0.00 -14.38
+

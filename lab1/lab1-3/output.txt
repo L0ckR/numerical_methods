@@ -1,0 +1,28 @@
+Matrix A:
+ 23.00  -6.00  -5.00   9.00
+  8.00  22.00  -2.00   5.00
+  7.00  -6.00  18.00  -1.00
+  3.00   5.00   5.00 -19.00
+
+Vector b:
+232.00 -82.00 202.00 -57.00
+
+Simple iterations method:
+
+Solution x:
+  8.00  -7.00   6.00   4.00
+
+Number of iterations: 34
+
+Check A * x = b:
+232.00 -82.00 202.00 -57.00
+
+Seidel method:
+
+Solution x:
+  8.00  -7.00   6.00   4.00
+
+Number of iterations: 9
+
+Check A * x = b:
+232.00 -82.00 202.00 -57.00

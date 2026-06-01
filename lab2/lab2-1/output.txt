@@ -1,0 +1,11 @@
+Equation: ln(x + 1) - 2*x^2 + 1 = 0
+
+Simple iteration method:
+x = 0.9070751431436547
+iterations = 8
+f(x) = 9.907470133185825e-08
+
+Newton method:
+x = 0.9070751750626973
+iterations = 4
+f(x) = -1.0658141036401503e-14

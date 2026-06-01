@@ -1,0 +1,11 @@
+System:
+2*x1 - cos(x2) = 0
+2*x2 - exp(x1) = 0
+
+Simple iteration method:
+x = [0.373728132206646, 0.7265713809970904]
+iterations = 21
+
+Newton method:
+x = [0.37372830829433723, 0.7265711450558806]
+iterations = 4
