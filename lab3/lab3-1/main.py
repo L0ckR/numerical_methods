@@ -25,7 +25,7 @@ def Lagrange_interpolation(points, x):
         res += f_prod * prod(points, x, i)
 
         sign = " + " if f_prod > 0 else ""
-        res_str += f"{sign} {f_prod:.2f}*" + prod_to_print(points, i)
+        res_str += f"{sign} {f_prod:.12g}*" + prod_to_print(points, i)
 
     return res, res_str
 
@@ -39,11 +39,11 @@ def Newton_interpolation(points, x):
 
     
     res = coefs[0]
-    res_str = f"P(x) = {coefs[0]:.2f}"
+    res_str = f"P(x) = {coefs[0]:.12g}"
     current_terms = []
     
     for i in range(1, len(coefs)):
-        current_terms.append(f"(x - {points[i-1]:.2f})")
+        current_terms.append(f"(x - {points[i-1]:.12g})")
         term_str = "*".join(current_terms)
         p = 1
         for j in range(i):
@@ -51,7 +51,7 @@ def Newton_interpolation(points, x):
         res += coefs[i] * p
         
         sign = " + " if coefs[i] >= 0 else " - "
-        res_str += f"{sign}{abs(coefs[i]):.2f}*{term_str}"
+        res_str += f"{sign}{abs(coefs[i]):.12g}*{term_str}"
     
     return res, res_str
 

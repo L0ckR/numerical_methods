@@ -1,17 +1,21 @@
+Function: y = x / ((2*x + 7)*(3*x + 4))
+Interval: [-1.0, 1.0]
+Runge-Romberg error estimates refer to step 0.25.
+
 Rectangle method:
-Step = 0.5: integral = 0.30190125783603566
-Step = 0.25: integral = 0.308999205421295
-Error rate: = 0.009463930113679112
-More accurate integral (runge_rombert): = 0.3113651879497148
+Step = 0.5: integral = -0.034310603265116243
+Step = 0.25: integral = -0.039242405208091885
+Error rate: = 0.0016439339809918806
+More accurate integral (runge_rombert): = -0.04088633918908376
 
 Trapeze method:
-Step = 0.5: integral = 0.3310806548986745
-Step = 0.25: integral = 0.31649095636735514
-Error rate: = 0.01945293137509248
-More accurate integral (runge_rombert): = 0.31162772352358203
+Step = 0.5: integral = -0.05701659451659452
+Step = 0.25: integral = -0.04566359889085538
+Error rate: = 0.0037843318752463794
+More accurate integral (runge_rombert): = -0.041879267015609005
 
 Simpson method:
-Step = 0.5: integral = 0.31349474525210475
-Step = 0.25: integral = 0.3116277235235819
-Error rate: = 0.0019914898437576765
-More accurate integral (runge_rombert): = 0.31150325540834706
+Step = 0.5: integral = -0.04533429533429534
+Step = 0.25: integral = -0.04187926701560901
+Error rate: = 0.00023033522124575508
+More accurate integral (runge_rombert): = -0.041648931794363256

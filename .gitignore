@@ -216,3 +216,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# LaTeX and generated plots
+report_1-4/*.aux
+report_1-4/*.out
+report_1-4/*.toc
+report_1-4/*.synctex.gz
+lab*/*/*.png

@@ -52,6 +52,24 @@ def sum_squared_errors(x, y, ls_coefs):
     y_ls = [P(ls_coefs, x_i) for x_i in x]
     return sum((y_i - y_ls_i)**2 for y_i, y_ls_i in zip(y, y_ls))
 
+
+def draw_plot(x, y, ls1, ls2):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    grid = [min(x) + (max(x) - min(x)) * i / 400 for i in range(401)]
+    fig, ax = plt.subplots(figsize=(8, 4.8))
+    ax.plot(x, y, "o--", color="black", linewidth=1, label="Табличная функция")
+    ax.plot(grid, [P(ls1, point) for point in grid], label="МНК: степень 1")
+    ax.plot(grid, [P(ls2, point) for point in grid], label="МНК: степень 2")
+    ax.set(xlabel="x", ylabel="y", title="Метод наименьших квадратов — вариант 6")
+    ax.grid(alpha=0.25)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig("least_squares.png", dpi=180)
+    plt.close(fig)
+
 def main():
     with open('input.txt', 'r') as file:
         data = [list(map(float, line.split())) for line in file.readlines()]
@@ -68,6 +86,8 @@ def main():
         file.write("Least squares method, degree = 2:\n")
         file.write(f"P(x) = {ls2[0]} + {ls2[1]} * x + {ls2[2]} * x^2\n")
         file.write(f"Sum of squared errors = {sum_squared_errors(x, y, ls2)}")
+
+    draw_plot(x, y, ls1, ls2)
 
 if __name__ == "__main__":
     main()

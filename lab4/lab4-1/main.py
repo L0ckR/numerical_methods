@@ -2,28 +2,42 @@ import math
 
 
 def exact_solution(x):
-    return math.cos(math.sin(x)) + math.sin(math.cos(x))
+    return (1 + x) * math.exp(-x * x)
 
 
 def f(x, y, z):
-    h = 1e-5
-    return (exact_solution(x + h) - 2 * exact_solution(x) + exact_solution(x - h)) / h ** 2
+    return -4 * x * z - (4 * x * x + 2) * y
 
 
 def euler_method(y0, z0, interval, h):
-    l, r = interval
-    x = [l + i * h for i in range(int(round((r - l) / h)) + 1)]
+    x = make_grid(interval, h)
     y = [y0]
     z = z0
     for i in range(len(x) - 1):
-        z += h * f(x[i], y[i], z)
         y.append(y[i] + h * z)
+        z += h * f(x[i], y[i], z)
     return x, y
 
 
-def runge_kutta_method(y0, z0, interval, h):
+def make_grid(interval, h):
     l, r = interval
-    x = [l + i * h for i in range(int(round((r - l) / h)) + 1)]
+    if not all(math.isfinite(v) for v in (l, r, h)) or h <= 0 or r <= l:
+        raise ValueError("Expected a finite interval l < r and h > 0")
+    n = round((r - l) / h)
+    if n < 1 or not math.isclose(n * h, r - l, rel_tol=1e-12, abs_tol=1e-14):
+        raise ValueError("The step must divide the interval into an integer number of parts")
+    return [l + i * h for i in range(n)] + [r]
+
+
+def runge_romberg(coarse, fine, order):
+    """Оценка погрешности на мелкой сетке в общих узлах."""
+    if len(fine) != 2 * len(coarse) - 1:
+        raise ValueError("Expected nested grids with step ratio 2")
+    return max(abs(a - fine[2*i]) for i, a in enumerate(coarse)) / (2**order - 1)
+
+
+def runge_kutta_method(y0, z0, interval, h):
+    x = make_grid(interval, h)
     y = [y0]
     z = [z0]
     for i in range(len(x) - 1):
@@ -50,23 +64,54 @@ def adams_method(y0, z0, interval, h):
 
 
 def main():
-    with open('input.txt', 'r') as file:
-        data = [list(map(float, line.split())) for line in file.readlines()]
-    y0, z0 = data[0][0], data[1][0]
-    interval = data[2]
-    h = data[3][0]
+    with open('input.txt', encoding='utf-8') as file:
+        data = [list(map(float, line.split())) for line in file if line.strip()]
+    y0, z0, interval, h = data[0][0], data[1][0], data[2], data[3][0]
+    methods = [('Euler', euler_method, 1), ('Runge-Kutta', runge_kutta_method, 4),
+               ('Adams', adams_method, 4)]
+    results = []
+    for name, method, order in methods:
+        x, y, *_ = method(y0, z0, interval, h)
+        xf, yf, *_ = method(y0, z0, interval, h / 2)
+        results.append((name, order, y, yf, runge_romberg(y, yf, order)))
 
-    x_e, y_e = euler_method(y0, z0, interval, h)
-    x_r, y_r, _ = runge_kutta_method(y0, z0, interval, h)
-    x_a, y_a = adams_method(y0, z0, interval, h)
-
-    with open('output.txt', 'w') as file:
+    with open('output.txt', 'w', encoding='utf-8') as file:
         file.write("Cauchy problem, variant 6\n")
-        file.write("Exact solution: y = cos(sin(x)) + sin(cos(x))\n\n")
-        file.write("x Euler Runge-Kutta Adams Exact\n")
-        for i in range(len(x_r)):
-            file.write(f"{x_r[i]:.2f} {y_e[i]:.6f} {y_r[i]:.6f} {y_a[i]:.6f} {exact_solution(x_r[i]):.6f}\n")
+        file.write("Equation: y'' + 4*x*y' + (4*x^2 + 2)*y = 0\n")
+        file.write("Exact solution: y = (1 + x)*exp(-x^2)\n")
+        file.write(f"y({interval[0]:g}) = {y0:g}, y'({interval[0]:g}) = {z0:g}\n")
+        file.write(f"Interval = {interval}, h = {h:.12g}, h/2 = {h/2:.12g}\n\n")
+        file.write("x        Euler          Runge-Kutta    Adams          Exact\n")
+        for i, t in enumerate(x):
+            values = [result[2][i] for result in results] + [exact_solution(t)]
+            file.write(f"{t:.6f} " + ' '.join(f'{v: .10f}' for v in values) + '\n')
+        file.write('\nMaximum absolute errors over each full grid:\n')
+        for name, order, y, yf, rr in results:
+            coarse_error = max(abs(v - exact_solution(t)) for t, v in zip(x, y))
+            fine_error = max(abs(v - exact_solution(t)) for t, v in zip(xf, yf))
+            file.write(f'{name}, p={order}:\n')
+            file.write(f'  max error (h)   = {coarse_error:.10e}\n')
+            file.write(f'  max error (h/2) = {fine_error:.10e}\n')
+            file.write(f'  Runge-Romberg (h/2, common nodes) = {rr:.10e}\n')
+
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    dense = [interval[0] + (interval[1] - interval[0])*i/500 for i in range(501)]
+    fig, axes = plt.subplots(1, 2, figsize=(11, 4))
+    axes[0].plot(dense, [exact_solution(t) for t in dense], 'k-', label='Exact')
+    for name, _, y, _, _ in results:
+        axes[0].plot(x, y, 'o--', markersize=3, label=name)
+        axes[1].semilogy(x[1:], [max(abs(v-exact_solution(t)), 1e-16) for t,v in zip(x[1:],y[1:])], 'o-', markersize=3, label=name)
+    axes[0].set(xlabel='x', ylabel='y(x)', title=f'Cauchy problem: variant 6, h={h:g}')
+    axes[1].set(xlabel='x', ylabel='Absolute error', title='Error on the coarse grid')
+    for ax in axes:
+        ax.grid(True, alpha=0.3)
+        ax.legend()
+    fig.tight_layout()
+    fig.savefig('solution.png', dpi=180)
+    plt.close(fig)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
