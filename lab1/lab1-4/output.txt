@@ -1,20 +1,33 @@
 Matrix A:
-  7.00   3.00 -13.00
-  3.00  -7.00  -8.00
--13.00  -8.00  -1.00
+  9.00000000   2.00000000  -7.00000000
+  2.00000000  -4.00000000  -1.00000000
+ -7.00000000  -1.00000000   1.00000000
 
 Eigen values:
- 18.66  -5.28 -14.38
+ 13.34935955  -4.30239653  -3.04696302
 
 Eigen vectors:
-eigen vector num 1:   0.75   0.28  -0.61
-eigen vector num 2:  -0.57   0.73  -0.37
-eigen vector num 3:   0.34   0.62   0.70
+eigen vector num 1:   0.85838254   0.12759289  -0.49688979
+eigen vector num 2:  -0.16501420   0.98577409  -0.03193373
+eigen vector num 3:   0.48574656   0.10940522   0.86722591
 
-Number of iterations: 8
+Number of iterations: 6
 
-Matrix A result::
- 18.66   0.00   0.00
-  0.00  -5.28   0.00
-  0.00   0.00 -14.38
+Matrix A result:
+ 13.34935955   0.00000000  -0.00000000
+  0.00000000  -4.30239653   0.00000000
+ -0.00000000   0.00000000  -3.04696302
 
+Requested accuracy: 1.0e-06
+Iteration / upper off-diagonal norm:
+  0 7.348469228e+00
+  1 2.236067977e+00
+  2 1.389435433e-01
+  3 1.772705500e-02
+  4 1.957834559e-03
+  5 2.103785204e-06
+  6 2.333400148e-10
+Eigenpair 1 residual ||A*v-lambda*v||_2: 2.333e-10
+Eigenpair 2 residual ||A*v-lambda*v||_2: 9.567e-16
+Eigenpair 3 residual ||A*v-lambda*v||_2: 2.333e-10
+Orthogonality max |V^T*V-I|: 2.220e-16

@@ -56,7 +56,21 @@ def interpolate(x: list, x_0: float, coef: list) -> float:
     return a[k] + b[k] * diff + c[k] * diff ** 2 + d[k] * diff ** 3
 
 def draw_plot(x_test, res, x, f, coef):
-    return None
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    grid = [x[0] + (x[-1] - x[0]) * i / 400 for i in range(401)]
+    fig, ax = plt.subplots(figsize=(8, 4.8))
+    ax.plot(grid, [interpolate(x, point, coef) for point in grid], label="Натуральный кубический сплайн")
+    ax.scatter(x, f, color="black", zorder=3, label="Табличные значения")
+    ax.scatter([x_test], [res], color="tab:red", zorder=4, label=f"S({x_test:g}) = {res:.6f}")
+    ax.set(xlabel="x", ylabel="y", title="Кубический сплайн — вариант 6")
+    ax.grid(alpha=0.25)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig("spline.png", dpi=180)
+    plt.close(fig)
 
 def main():
     with open('input.txt', 'r') as file:
